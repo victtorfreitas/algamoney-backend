@@ -28,15 +28,21 @@ public class CategoriaResource {
     }
 
     @PostMapping
-    public ResponseEntity inserir(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
+    public ResponseEntity<Categoria> inserir(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
         Categoria categoriaSave = categoriaRepository.save(categoria);
         applicationEventPublisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSave.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSave);
     }
 
     @GetMapping("/{codigo}")
-    public ResponseEntity buscaPorCodigo(@PathVariable Long codigo) {
+    public ResponseEntity<?> buscaPorCodigo(@PathVariable Long codigo) {
         Optional<Categoria> categoria = categoriaRepository.findById(codigo);
         return categoria.isPresent() ? ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long codigo) {
+        categoriaRepository.deleteById(codigo);
     }
 }
