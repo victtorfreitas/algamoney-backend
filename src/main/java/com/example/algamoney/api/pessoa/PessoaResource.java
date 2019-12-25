@@ -29,15 +29,21 @@ public class PessoaResource {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ResponseEntity inserir(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
+    public ResponseEntity<Pessoa> inserir(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
         Pessoa pessoaSaved = pessoaRepository.save(pessoa);
         applicationEventPublisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSaved.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSaved);
     }
 
     @GetMapping("/{codigo}")
-    public ResponseEntity buscaPorCodigo(@PathVariable Long codigo) {
+    public ResponseEntity<?> buscaPorCodigo(@PathVariable Long codigo) {
         Optional<Pessoa> pessoaBD = pessoaRepository.findById(codigo);
         return pessoaBD.isPresent() ? ResponseEntity.ok(pessoaBD.get()) : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long codigo) {
+        pessoaRepository.deleteById(codigo);
     }
 }
