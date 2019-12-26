@@ -16,10 +16,14 @@ import java.util.Optional;
 public class PessoaResource {
     private final PessoaRepository pessoaRepository;
     private ApplicationEventPublisher applicationEventPublisher;
+    private PessoaService pessoaService;
 
-    public PessoaResource(PessoaRepository pessoaRepository, ApplicationEventPublisher applicationEventPublisher) {
+    public PessoaResource(PessoaRepository pessoaRepository,
+                          ApplicationEventPublisher applicationEventPublisher,
+                          PessoaService pessoaService) {
         this.pessoaRepository = pessoaRepository;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.pessoaService = pessoaService;
     }
 
     @GetMapping
@@ -45,5 +49,19 @@ public class PessoaResource {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long codigo) {
         pessoaRepository.deleteById(codigo);
+    }
+
+    @PutMapping("/{codigo}")
+    public ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo,
+                                            @Valid @RequestBody Pessoa pessoa) {
+        Pessoa pessoaAtualizada = pessoaService.update(codigo, pessoa);
+        return ResponseEntity.ok(pessoaAtualizada);
+    }
+
+    @PutMapping("/{codigo}/ativo")
+    public ResponseEntity<Pessoa> atualizarPropiedadeAtivo(@PathVariable Long codigo,
+                                            @RequestBody Boolean ativo) {
+        Pessoa pessoaAtualizada = pessoaService.updatePropriedadeAtivo(codigo, ativo);
+        return ResponseEntity.ok(pessoaAtualizada);
     }
 }
