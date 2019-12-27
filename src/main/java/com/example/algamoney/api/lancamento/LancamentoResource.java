@@ -41,4 +41,9 @@ public class LancamentoResource {
         Optional<Lancamento> lacamentoBD = lancamentoRepository.findById(codigo);
         return lacamentoBD.isPresent() ? ResponseEntity.ok(lacamentoBD.get()) : ResponseEntity.notFound().build();
     }
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePorCodigo(@PathVariable Long codigo){
+        lancamentoRepository.deleteById(codigo);
+    }
 }
