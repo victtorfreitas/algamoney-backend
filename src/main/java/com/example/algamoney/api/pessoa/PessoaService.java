@@ -1,7 +1,7 @@
 package com.example.algamoney.api.pessoa;
 
+import com.example.algamoney.api.exceptionhandler.PessoaInativaOuInexistenteException;
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,7 +26,15 @@ public class PessoaService {
         return pessoaRepository.save(pessoaBD);
     }
 
-    private Pessoa getPessoaBD(Long codigo) {
-        return pessoaRepository.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
+    public Pessoa getPessoaBD(Long codigo) {
+        return pessoaRepository.findById(codigo).orElseThrow(PessoaInativaOuInexistenteException::new);
+    }
+
+    public Pessoa getPessoaAtiva(Long codigo) {
+        Pessoa pessoa = pessoaRepository.findById(codigo).orElseThrow(PessoaInativaOuInexistenteException::new);
+        if (pessoa.isInativo()) {
+            throw new PessoaInativaOuInexistenteException();
+        }
+        return pessoa;
     }
 }
