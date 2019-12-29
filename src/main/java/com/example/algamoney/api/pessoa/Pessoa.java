@@ -26,7 +26,7 @@ public class Pessoa {
 
     @JsonIgnore
     @Transient
-    public boolean isInativo(){
+    public boolean isInativo() {
         return !this.ativo;
     }
 }
