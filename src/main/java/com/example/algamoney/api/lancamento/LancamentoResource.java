@@ -14,18 +14,15 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/lancamentos")
 public class LancamentoResource {
-    private final LancamentoRepository lancamentoRepository;
     private LancamentoService lancamentoService;
 
-    public LancamentoResource(LancamentoRepository lancamentoRepository,
-                              LancamentoService lancamentoService) {
-        this.lancamentoRepository = lancamentoRepository;
+    public LancamentoResource(LancamentoService lancamentoService) {
         this.lancamentoService = lancamentoService;
     }
 
     @GetMapping
     public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
-        return lancamentoRepository.pesquisar(lancamentoFilter, pageable);
+        return lancamentoService.pesquisar(lancamentoFilter, pageable);
     }
 
     @PostMapping
@@ -39,13 +36,13 @@ public class LancamentoResource {
 
     @GetMapping("/{codigo}")
     public ResponseEntity<?> buscaPorCodigo(@PathVariable Long codigo) {
-        Optional<Lancamento> lacamentoBD = lancamentoRepository.findById(codigo);
+        Optional<Lancamento> lacamentoBD = lancamentoService.findById(codigo);
         return lacamentoBD.isPresent() ? ResponseEntity.ok(lacamentoBD.get()) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePorCodigo(@PathVariable Long codigo) {
-        lancamentoRepository.deleteById(codigo);
+        lancamentoService.deleteById(codigo);
     }
 }
