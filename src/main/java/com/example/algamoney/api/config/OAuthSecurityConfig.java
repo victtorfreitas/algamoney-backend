@@ -12,8 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class OAuthSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
     @Override
+    @Bean
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
