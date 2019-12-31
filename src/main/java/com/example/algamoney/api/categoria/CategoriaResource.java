@@ -4,6 +4,7 @@ import com.example.algamoney.api.event.RecursoCriadoEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,11 +24,13 @@ public class CategoriaResource {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority(T(com.example.algamoney.api.config.security.RoleSecurity).ROLE_PESQUISAR_CATEGORIA)")
     public List<Categoria> listarTodos() {
         return categoriaRepository.findAll();
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority(T(com.example.algamoney.api.config.security.RoleSecurity).ROLE_CADASTRAR_CATEGORIA)")
     public ResponseEntity<Categoria> inserir(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
         Categoria categoriaSave = categoriaRepository.save(categoria);
         applicationEventPublisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSave.getCodigo()));

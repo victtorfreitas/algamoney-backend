@@ -1,5 +1,6 @@
 package com.example.algamoney.api.pessoa;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -23,4 +24,9 @@ public class Pessoa {
     @Embedded
     private Endereco endereco;
 
+    @JsonIgnore
+    @Transient
+    public boolean isInativo() {
+        return !this.ativo;
+    }
 }
