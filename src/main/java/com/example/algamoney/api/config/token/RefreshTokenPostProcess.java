@@ -1,5 +1,6 @@
 package com.example.algamoney.api.config.token;
 
+import com.example.algamoney.api.config.property.ApiProperty;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -20,6 +21,11 @@ import java.util.Objects;
 
 @ControllerAdvice
 public class RefreshTokenPostProcess implements ResponseBodyAdvice<OAuth2AccessToken> {
+    private ApiProperty property;
+
+    public RefreshTokenPostProcess(ApiProperty property) {
+        this.property = property;
+    }
 
     @Override
     public boolean supports(@NonNull MethodParameter methodParameter, @NonNull Class<? extends HttpMessageConverter<?>> aClass) {
@@ -55,7 +61,7 @@ public class RefreshTokenPostProcess implements ResponseBodyAdvice<OAuth2AccessT
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
 
         refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(false); //TODO: Em produção mudar para TRUE
+        refreshTokenCookie.setSecure(property.getSeguranca().isEnableHttps());
         refreshTokenCookie.setPath(request.getContextPath() + "/oauth/token");
         refreshTokenCookie.setMaxAge(2592000);
         response.addCookie(refreshTokenCookie);
