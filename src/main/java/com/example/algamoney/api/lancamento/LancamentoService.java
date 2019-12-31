@@ -35,4 +35,8 @@ public class LancamentoService {
     public void deleteById(Long codigo) {
         lancamentoRepository.deleteById(codigo);
     }
+
+    public Page<LancamentoDTO> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+        return lancamentoRepository.resumir(lancamentoFilter, pageable);
+    }
 }

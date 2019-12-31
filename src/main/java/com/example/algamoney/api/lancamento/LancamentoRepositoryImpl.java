@@ -27,6 +27,17 @@ public class LancamentoRepositoryImpl extends RepositoryDefault implements Lanca
         return (Page<Lancamento>) PageUtils.paginate(pageable, query);
     }
 
+    @Override
+    public Page<LancamentoDTO> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+        QLancamento qLancamento = QLancamento.lancamento;
+        BooleanBuilder conditions = createFilter(lancamentoFilter, qLancamento);
+        JPAQuery<?> query = queryFactory()
+                .select(LancamentoDTO.constructFullExpression(qLancamento))
+                .from(qLancamento)
+                .where(conditions);
+        return (Page<LancamentoDTO>) PageUtils.paginate(pageable, query);
+    }
+
     private BooleanBuilder createFilter(LancamentoFilter lancamentoFilter, QLancamento qLancamento) {
         BooleanBuilder conditions = new BooleanBuilder();
         if (StringUtils.isNotEmpty(lancamentoFilter.getDescricao())) {

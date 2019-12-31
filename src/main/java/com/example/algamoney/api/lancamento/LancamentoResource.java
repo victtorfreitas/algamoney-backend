@@ -24,6 +24,10 @@ public class LancamentoResource {
     public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
         return lancamentoService.pesquisar(lancamentoFilter, pageable);
     }
+    @GetMapping(params = "resumo")
+    public Page<LancamentoDTO> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+        return lancamentoService.resumir(lancamentoFilter, pageable);
+    }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
