@@ -2,13 +2,14 @@ package com.example.algamoney.api.pessoa;
 
 import com.example.algamoney.api.event.RecursoCriadoEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,8 +28,8 @@ public class PessoaResource {
     }
 
     @GetMapping
-    public List<Pessoa> listarTodos() {
-        return pessoaRepository.findAll();
+    public Page<Pessoa> filtro(PessoaFilter pessoaFilter, Pageable pageable) {
+        return pessoaService.filtrar(pessoaFilter, pageable);
     }
 
     @PostMapping
