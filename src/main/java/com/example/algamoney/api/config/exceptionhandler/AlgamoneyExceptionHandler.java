@@ -1,4 +1,4 @@
-package com.example.algamoney.api.exceptionhandler;
+package com.example.algamoney.api.config.exceptionhandler;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -65,6 +65,16 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
         String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
         List<Erro> erros = Collections.singletonList(
                 new Erro(mensagemDesenvolvedor, "Pessoa inexistente ou inativa!")
+        );
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({EntidadeNaoEncontradaException.class})
+    public ResponseEntity<Object> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex,
+                                                                            WebRequest request) {
+        String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
+        List<Erro> erros = Collections.singletonList(
+                new Erro(mensagemDesenvolvedor, "Entidade não encontrada!")
         );
         return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }

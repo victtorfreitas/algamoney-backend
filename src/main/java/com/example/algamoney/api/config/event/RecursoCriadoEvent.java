@@ -1,4 +1,4 @@
-package com.example.algamoney.api.event;
+package com.example.algamoney.api.config.event;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;

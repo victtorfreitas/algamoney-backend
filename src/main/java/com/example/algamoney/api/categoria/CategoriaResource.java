@@ -1,6 +1,6 @@
 package com.example.algamoney.api.categoria;
 
-import com.example.algamoney.api.event.RecursoCriadoEvent;
+import com.example.algamoney.api.config.event.RecursoCriadoEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

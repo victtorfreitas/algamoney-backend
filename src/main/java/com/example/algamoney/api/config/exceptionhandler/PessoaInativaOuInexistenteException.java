@@ -1,4 +1,4 @@
-package com.example.algamoney.api.exceptionhandler;
+package com.example.algamoney.api.config.exceptionhandler;
 
 public class PessoaInativaOuInexistenteException extends RuntimeException {
 

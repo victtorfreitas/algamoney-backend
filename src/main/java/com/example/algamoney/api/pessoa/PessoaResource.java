@@ -1,6 +1,6 @@
 package com.example.algamoney.api.pessoa;
 
-import com.example.algamoney.api.event.RecursoCriadoEvent;
+import com.example.algamoney.api.config.event.RecursoCriadoEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

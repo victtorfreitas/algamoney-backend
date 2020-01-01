@@ -1,6 +1,6 @@
 package com.example.algamoney.api.pessoa;
 
-import com.example.algamoney.api.exceptionhandler.PessoaInativaOuInexistenteException;
+import com.example.algamoney.api.config.exceptionhandler.PessoaInativaOuInexistenteException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +39,12 @@ public class PessoaService {
             throw new PessoaInativaOuInexistenteException();
         }
         return pessoa;
+    }
+
+    public boolean isValid(Long codigo) {
+        Pessoa pessoa = pessoaRepository.findById(codigo).orElseThrow(PessoaInativaOuInexistenteException::new);
+        if (pessoa.isInativo()) throw new PessoaInativaOuInexistenteException();
+        return true;
     }
 
     public Page<Pessoa> filtrar(PessoaFilter pessoaFilter, Pageable pageable) {

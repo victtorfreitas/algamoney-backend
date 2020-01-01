@@ -24,6 +24,7 @@ public class LancamentoResource {
     public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
         return lancamentoService.pesquisar(lancamentoFilter, pageable);
     }
+
     @GetMapping(params = "resumo")
     public Page<LancamentoDTO> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
         return lancamentoService.resumir(lancamentoFilter, pageable);
@@ -48,5 +49,10 @@ public class LancamentoResource {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePorCodigo(@PathVariable Long codigo) {
         lancamentoService.deleteById(codigo);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> atualizaLancamento(@Valid @RequestBody Lancamento lancamento) {
+        return ResponseEntity.ok(lancamentoService.atualizaLancamento(lancamento));
     }
 }

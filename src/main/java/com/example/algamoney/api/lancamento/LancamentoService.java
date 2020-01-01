@@ -1,6 +1,9 @@
 package com.example.algamoney.api.lancamento;
 
+import com.example.algamoney.api.config.exceptionhandler.EntidadeNaoEncontradaException;
+import com.example.algamoney.api.pessoa.Pessoa;
 import com.example.algamoney.api.pessoa.PessoaService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,7 @@ public class LancamentoService {
     }
 
     public Lancamento salvar(Lancamento lancamento) {
-        pessoaService.getPessoaAtiva(lancamento.getPessoa().getCodigo());
+        pessoaService.isValid(lancamento.getPessoa().getCodigo());
         return lancamentoRepository.save(lancamento);
     }
 
@@ -38,5 +41,23 @@ public class LancamentoService {
 
     public Page<LancamentoDTO> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
         return lancamentoRepository.resumir(lancamentoFilter, pageable);
+    }
+
+    public Lancamento atualizaLancamento(Lancamento lancamento) {
+        Lancamento lancamentoBD = buscaLancamento(lancamento.getCodigo());
+        validaPessoaLancamento(lancamentoBD.getPessoa(), lancamento.getPessoa());
+
+        BeanUtils.copyProperties(lancamento, lancamentoBD, "codigo");
+        return lancamentoRepository.save(lancamentoBD);
+    }
+
+    private void validaPessoaLancamento(Pessoa pessoaBD, Pessoa pessoa) {
+        if (pessoaBD.getCodigo() != pessoa.getCodigo()) {
+            pessoaService.isValid(pessoa.getCodigo());
+        }
+    }
+
+    private Lancamento buscaLancamento(Long codigo) {
+        return lancamentoRepository.findById(codigo).orElseThrow(() -> new EntidadeNaoEncontradaException());
     }
 }
